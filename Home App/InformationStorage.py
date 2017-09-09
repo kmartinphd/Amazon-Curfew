@@ -8,7 +8,7 @@ class InformationStorage:
         self.read_file()
 
     def read_file(self):
-        file = open('information.txt', 'r')
+        file = open('information.text', 'r')
         content = file.readlines()
         for line in content:
             print('program is reading a line')
