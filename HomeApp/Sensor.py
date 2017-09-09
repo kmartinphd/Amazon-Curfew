@@ -10,8 +10,8 @@ import InformationStorage
 
 class Sensor:
     def __init__(self):
-        info_source = InformationStorage.InformationStorage()
-        temp = info_source.get_mac_addresses()
+        self.info_source = InformationStorage.InformationStorage()
+        temp = self.info_source.get_mac_addresses()
         self.dict_lock = Lock() #lock for the mac_dict variable
         self.mac_dict = {}
         for m in temp:
@@ -30,23 +30,18 @@ class Sensor:
             try:
                 for m in self.mac_dict.keys():
                     time.sleep(1)
-                    b= BluetoothRSSI(addr=m)
+                    b = BluetoothRSSI(addr=m)
                     rssi = b.get_rssi()
-                    self.dict_lock.release()
+                    self.dict_lock.acquire()
                     self.mac_dict[m] = rssi
                     self.dict_lock.release()
-            except (KeyboardInterrupt, SystemExit):
+            except (KeyboardInterrupt):
                 message = "Exception raised in Sensor run loop, method update_dict: either Keyboard Interrupt or System exit"
                 print message
-                self.dict_lock.release()
+                #self.dict_lock.release()
                 break
 
-            while True:
-                try:
-                    time.sleep(sys.maxint)
-                except KeyboardInterrupt, SystemExit:
-                    print "exit program"
-                    break
+
 
     def run(self):
         try:
@@ -54,3 +49,17 @@ class Sensor:
         except:
             message = "Failed to launch all threads in Sensor run method"
             message += "Stack Trace:/n" + traceback.format_exc()
+
+        while True:
+            try:
+                time.sleep(sys.maxint)
+            except KeyboardInterrupt, SystemExit:
+                print "exit program"
+                break
+
+    def map_mac(self, mac):
+        name = self.info_source.get_name(mac)
+        if name != "person_not_found":
+            return name
+        else:
+            return None

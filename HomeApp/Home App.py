@@ -6,8 +6,8 @@ app = Flask(__name__)
 ask = Ask(app, "/")
 mac_name_dict = {}
 macs_at_home = ["DC:2B:2A:32:AF:88"]
-sensor = Sensor()
-sensor.run()
+sensor = Sensor.Sensor()
+
 @app.route("/")
 def homepage():
     """
@@ -15,11 +15,11 @@ def homepage():
     ensure the server is online
     :return: message text to be posted
     """
-    return render_template("index.html")
+    return "homepage"
 
-@ask.launch()
+@ask.launch
 def start_skill():
-    return whoHome()
+    return statement(whoHome())
 
 @ask.intent("WhoHome")
 def run_who_hone():
@@ -30,12 +30,24 @@ def whoHome():
     count = 0
     names = []
     for m in macs_at_home:
-        count += 1
-        #MAP the address into the names list
-    message = "there are " + str(count) + " people home."
-    message += " These people are: "
+        n = sensor.map_mac(m)
+        if n is not None:
+            names.append(n)
+            count += 1
+
+    message = ""
+    if count > 1:
+        message = "there are " + str(count) + " people home."
+        message += " These people are: "
+    elif count == 1:
+        message = "there is " + str(count) + " person home."
+        message += " This person is: "
+
     for n in names:
         message += ", " + n
+    print "*" * 30
+    print count
+    print "*" * 30
     return message
 
 
@@ -53,3 +65,6 @@ def get_addresses():
     return macs_at_home
 
 
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=False, threaded = True)
+    sensor.run()
