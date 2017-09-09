@@ -36,6 +36,10 @@ def run_who_hone():
 def run_who_left(firstName, lastName):
     return statement(whoLeft(firstName, lastName))
 
+@ask.intent("WhoArrive")
+def run_who_arrive(firsName, lastName):
+    return statement(whoLeft(firstName, lastName))
+
 def whoHome():
     """
     finds all the macs_at_home translates them into names through the sensor and then give a string that can be spoken
@@ -69,9 +73,22 @@ def whoHome():
 
 
 def whoLeft(firstName, lastName):
+    with open('leave_log.json') as leave_log:
+        data = json.load(data_f)
+        time_left = data.get(firstName)
+        if (time_left == None):
+            return "It looks like " + firstName + " hasn't left today."
+        else:
+            return firstName + " left at " + str(time_left)[:-3]
 
-    return "foo"
-
+def whoArrive(firstName,lastName):
+    with open('arrive_log.json') as leave_log:
+        data = json.load(data_f)
+        time_arrive = data.get(firstName)
+        if (time_arrive== None):
+            return "It looks like " + firstName + " hasn't gotten back today"
+        else:
+            return firstName + " arrived at " + str(time_left)[:-3]
 
 def get_addresses():
     """
