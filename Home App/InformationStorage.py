@@ -8,12 +8,25 @@ class InformationStorage:
 
     def read_file(self):
         file = open('information.text', 'r')
+        content = file.readlines()
+        for line in content:
+            tuple_of_info = line.split(',')
+            name = tuple_of_info[0]
+            mac_address = tuple_of_info[1]
+            person = Person(name=name, mac_address=mac_address)
+            self.person_list.append(person)
 
-        #file.read()
+    def get_mac_addresses(self):
+        addresses = []
+        for person in self.person_list:
+            address = person.mac_address
+            addresses.append(address)
+        return addresses
+
 
 
 class Person:
 
-    def __init__(self, name, mac_addresses):
+    def __init__(self, name, mac_address):
         self.name = name
-        self.mac_addresses = mac_addresses
+        self.mac_address = mac_address
