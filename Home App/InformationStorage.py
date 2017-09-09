@@ -10,6 +10,7 @@ class InformationStorage:
         file = open('information.txt', 'r')
         content = file.readlines()
         for line in content:
+            print('program is reading a line')
             tuple_of_info = line.split(',')
             name = tuple_of_info[0]
             mac_address = tuple_of_info[1]
