@@ -5,6 +5,7 @@ class InformationStorage:
 
     def __init__(self):
         self.person_list = []
+        self.read_file()
 
     def read_file(self):
         file = open('information.txt', 'r')
