@@ -7,7 +7,7 @@ class InformationStorage:
         self.person_list = []
 
     def read_file(self):
-        file = open('information.text', 'r')
+        file = open('information.txt', 'r')
         content = file.readlines()
         for line in content:
             tuple_of_info = line.split(',')
