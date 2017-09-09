@@ -42,7 +42,7 @@ def run_who_left(firstName):
 
 @ask.intent("WhoCame")
 def run_who_arrive(firstName):
-    return statement(whoLeft(firstName))
+    return statement(whoCame(firstName))
 
 def whoHome():
     """
@@ -91,7 +91,7 @@ def whoLeft(firstName):
         else:
             return firstName + " left at " + str(time_left)[:-3]
 
-def whoArrive(firstName):
+def whoCame(firstName):
     with open('arrive_log') as leave_log:
         data = json.load(leave_log)
         names = sensor.get_names_list()
