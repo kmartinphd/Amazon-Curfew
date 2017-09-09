@@ -29,10 +29,10 @@ class Sensor:
         while True:
             try:
                 for m in self.mac_dict.keys():
-                    time.sleep(1)
+                    #time.sleep(1)
                     b = BluetoothRSSI(addr=m)
                     rssi = b.get_rssi()
-                    temp =self.mac_dict[m]
+                    temp = self.mac_dict[m]
                     self.dict_lock.acquire()
                     self.mac_dict[m] = rssi
                     self.dict_lock.release()
@@ -41,7 +41,9 @@ class Sensor:
                             self.log_leave(m)
                         else:
                             self.log_arrive(m)
+
                     self.info_source.log_goings()
+
             except (KeyboardInterrupt):
                 message = "Exception raised in Sensor run loop, method update_dict: either Keyboard Interrupt or System exit"
                 print message

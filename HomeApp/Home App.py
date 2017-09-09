@@ -32,6 +32,9 @@ def start_skill():
 def run_who_hone():
     return statement(whoHome())
 
+@ask.intent("WhoLeft")
+def run_who_left(firstName, lastName):
+    return statement(whoLeft(firstName, lastName))
 
 def whoHome():
     """
@@ -64,6 +67,10 @@ def whoHome():
     print "*" * 30
     return message
 
+
+def whoLeft(firstName, lastName):
+
+    return "foo"
 
 
 def get_addresses():

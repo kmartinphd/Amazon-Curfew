@@ -7,8 +7,8 @@ class InformationStorage:
     def __init__(self):
         self.person_list = []
         self.read_file()
-        self.leave_times = {}
-        self.arrive_times = {}
+        self.leave_times = {} #maps names to leave times
+        self.arrive_times = {} #maps names to arrival times
 
     def read_file(self):
         with open('information.txt', 'r') as file:
