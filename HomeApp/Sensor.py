@@ -12,13 +12,18 @@ class Sensor:
     def __init__(self):
         self.info_source = InformationStorage.InformationStorage()
         temp = self.info_source.get_mac_addresses()
+        self.names_list = self.info_source.get_names_list()
         self.dict_lock = Lock() #lock for the mac_dict variable
         self.mac_dict = {}
         for m in temp:
             self.mac_dict[m] = None #dictionary mapping the bluetooth addresses to signal strength
+            self.log_leave(m)
 
     def get_mac_dict(self):
         return self.mac_dict
+
+    def get_names_list(self):
+        return self.names_list
 
     def update_dicts(self):
         """
@@ -39,10 +44,9 @@ class Sensor:
                     if self.mac_dict[m] != temp:
                         if self.mac_dict[m] is None:
                             self.log_leave(m)
-                        else:
+                        elif temp is None:
                             self.log_arrive(m)
 
-                    self.info_source.log_goings()
 
             except (KeyboardInterrupt):
                 message = "Exception raised in Sensor run loop, method update_dict: either Keyboard Interrupt or System exit"
@@ -75,6 +79,8 @@ class Sensor:
 
     def log_leave(self, mac):
         self.info_source.log_leave(mac)
+        self.info_source.log_goings()
 
     def log_arrive(self, mac):
         self.info_source.log_arrive(mac)
+        self.info_source.log_goings()

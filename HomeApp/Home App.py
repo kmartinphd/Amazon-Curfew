@@ -1,7 +1,9 @@
 from flask import Flask, render_template
 from flask_ask import Ask, question, statement
+from difflib import get_close_matches
 import Sensor
 import threading
+import json
 
 
 app = Flask(__name__)
@@ -13,6 +15,8 @@ sensor = Sensor.Sensor()
 class SensorRunnerThread(threading.Thread):
     def run(self):
         sensor.run()
+
+
 @app.route("/")
 def homepage():
     """
@@ -29,12 +33,16 @@ def start_skill():
 
 
 @ask.intent("WhoHome")
-def run_who_hone():
+def run_who_home():
     return statement(whoHome())
 
 @ask.intent("WhoLeft")
-def run_who_left(firstName, lastName):
-    return statement(whoLeft(firstName, lastName))
+def run_who_left(firstName):
+    return statement(whoLeft(firstName))
+
+@ask.intent("WhoCame")
+def run_who_arrive(firstName):
+    return statement(whoCame(firstName))
 
 def whoHome():
     """
@@ -68,10 +76,36 @@ def whoHome():
     return message
 
 
-def whoLeft(firstName, lastName):
-
-    return "foo"
-
+def whoLeft(firstName):
+    with open('leave_log') as leave_log:
+        data = json.load(leave_log)
+        names = sensor.get_names_list()
+        print "*" * 30
+        nearest = get_close_matches(firstName, names)
+        if nearest:
+            time_left = data.get(nearest[0])
+            if (time_left == None):
+                return "It looks like " + firstName + " hasn't left today."
+            else:
+                return firstName + " left at " + convert_time(time_left)
+        else:
+            return "I don't know who " + firstName + " is"
+def whoCame(firstName):
+    with open('arrive_log') as leave_log:
+        data = json.load(leave_log)
+        names = sensor.get_names_list()
+        nearest = get_close_matches(firstName, names)
+        if nearest:
+            time_arrive = data.get(nearest[0])
+            if (time_arrive== None):
+                return "It looks like " + firstName + " hasn't gotten back today"
+            else:
+                return firstName + " arrived at " + convert_time(time_arrive)
+        else:
+            print "#" *30
+            print firstName
+            print "#" *30
+            return "I don't know who " + firstName + " is"
 
 def get_addresses():
     """
@@ -86,6 +120,21 @@ def get_addresses():
             macs_at_home.append(m)
 
     return macs_at_home
+
+
+def convert_time(military_time):
+    hour = int(float(military_time[0:2]))
+    minutes = int(float(military_time[3:5]))
+
+    if (hour == 0):
+        return "12:"+ str(minutes) + 'a.m.'
+    elif (hour < 12):
+        return military_time[:5] + 'a.m.'
+    elif (hour == 12):
+        return military_time[:5] + 'p.m.'
+    else:
+        return str(hour - 12) + ':' + str(minutes) + 'p.m.'
+
 
 
 if __name__ == '__main__':
