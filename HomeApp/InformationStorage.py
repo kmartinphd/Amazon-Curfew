@@ -1,11 +1,14 @@
 #This will handle the storage of Mac Address and the associated persons
-
+import time
+import json
 class InformationStorage:
 
 
     def __init__(self):
         self.person_list = []
         self.read_file()
+        self.leave_times = {}
+        self.arrive_times = {}
 
     def read_file(self):
         with open('information.txt', 'r') as file:
@@ -29,6 +32,22 @@ class InformationStorage:
             if person.mac_address == mac_address:
                 return person.name
         return 'person_not_found'
+
+    def log_leave(self, mac):
+        name = self.get_name(mac)
+        self.leave_times[name] = time.strftime("%H:%M:%S")
+        self.arrive_times[name] = None
+
+    def log_arrive(self, mac):
+        name = self.get_name(mac)
+        self.arrive_times[name] = time.strftime("%H:%M:%S")
+        self.leave_times[name] = None
+
+    def log_goings(self):
+        with open("leave_log", "w+") as f:
+            json.dump(self.leave_times, f)
+        with open("arrive_log", "w+") as f:
+            json.dump(self.arrive_times, f)
 
 
 class Person:

@@ -1,13 +1,18 @@
 from flask import Flask, render_template
 from flask_ask import Ask, question, statement
 import Sensor
+import threading
+
 
 app = Flask(__name__)
 ask = Ask(app, "/")
 mac_name_dict = {}
-macs_at_home = ["DC:2B:2A:32:AF:88"]
+macs_at_home = []
 sensor = Sensor.Sensor()
 
+class SensorRunnerThread(threading.Thread):
+    def run(self):
+        sensor.run()
 @app.route("/")
 def homepage():
     """
@@ -17,24 +22,32 @@ def homepage():
     """
     return "homepage"
 
+
 @ask.launch
 def start_skill():
     return statement(whoHome())
+
 
 @ask.intent("WhoHome")
 def run_who_hone():
     return statement(whoHome())
 
+
 def whoHome():
+    """
+    finds all the macs_at_home translates them into names through the sensor and then give a string that can be spoken
+    :return: string that can be spoken by alexa
+    """
     global macs_at_home
     count = 0
     names = []
+    macs_at_home = get_addresses()
+    print macs_at_home
     for m in macs_at_home:
         n = sensor.map_mac(m)
         if n is not None:
             names.append(n)
             count += 1
-
     message = ""
     if count > 1:
         message = "there are " + str(count) + " people home."
@@ -42,7 +55,8 @@ def whoHome():
     elif count == 1:
         message = "there is " + str(count) + " person home."
         message += " This person is: "
-
+    else:
+        message = "No one else is home"
     for n in names:
         message += ", " + n
     print "*" * 30
@@ -51,10 +65,12 @@ def whoHome():
     return message
 
 
-def parseNameFile():
-    pass
 
 def get_addresses():
+    """
+
+    :return: updates macs at home to have only the macs in the house. returns this new list
+    """
     global macs_at_home
     macs = sensor.get_mac_dict()
     macs_at_home = []
@@ -66,5 +82,8 @@ def get_addresses():
 
 
 if __name__ == '__main__':
+    sensor_thread = SensorRunnerThread()
+    sensor_thread.setDaemon(True)
+    sensor_thread.start()
+
     app.run(debug=True, use_reloader=False, threaded = True)
-    sensor.run()
