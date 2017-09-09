@@ -23,6 +23,11 @@ class InformationStorage:
             addresses.append(address)
         return addresses
 
+    def get_name(self, mac_address):
+        for person in self.person_list:
+            if person.mac_address == mac_address:
+                return person.name
+        return 'person_not_found'
 
 
 class Person:
