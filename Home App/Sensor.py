@@ -6,12 +6,16 @@ import time
 import thread
 import traceback
 import sys
-
+import InformationStorage
 
 class Sensor:
     def __init__(self):
+        info_source = InformationStorage.InformationStorage()
+        temp = info_source.get_mac_addresses()
         self.dict_lock = Lock() #lock for the mac_dict variable
-        self.mac_dict = {"DC:2B:2A:32:AF:88": None,} #dictionary mapping the bluetooth addresses to signal strength
+        self.mac_dict = {}
+        for m in temp:
+            self.mac_dict[m] = None #dictionary mapping the bluetooth addresses to signal strength
 
     def get_mac_dict(self):
         return self.mac_dict
