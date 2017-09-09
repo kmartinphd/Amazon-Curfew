@@ -126,7 +126,9 @@ def convert_time(military_time):
     hour = int(float(military_time[0:2]))
     minutes = int(float(military_time[3:5]))
 
-    if (hour < 12):
+    if (hour == 0):
+        return "12:"+ str(minutes) + 'a.m.'
+    elif (hour < 12):
         return military_time[:5] + 'a.m.'
     elif (hour == 12):
         return military_time[:5] + 'p.m.'
