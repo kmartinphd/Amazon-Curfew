@@ -11,7 +11,7 @@ import sys
 class Sensor:
     def __init__(self):
         self.dict_lock = Lock() #lock for the mac_dict variable
-        self.mac_dict = {} #dictionary mapping the bluetooth addresses to signal strength
+        self.mac_dict = {"DC:2B:2A:32:AF:88": None,} #dictionary mapping the bluetooth addresses to signal strength
 
     def get_mac_dict(self):
         return self.mac_dict

@@ -5,9 +5,9 @@ import Sensor
 app = Flask(__name__)
 ask = Ask(app, "/")
 mac_name_dict = {}
-macs_at_home = []
-blue_in_area = get_addresses()
+macs_at_home = ["DC:2B:2A:32:AF:88"]
 sensor = Sensor()
+sensor.run()
 @app.route("/")
 def homepage():
     """
