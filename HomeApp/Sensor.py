@@ -10,7 +10,7 @@ import InformationStorage
 
 class Sensor:
     def __init__(self):
-        self.info_source = InformationStorage.InformationStorage()
+        self.info_source = InformationStorage.InformationStorage() #info_source used to store and retrieve data
         temp = self.info_source.get_mac_addresses()
         self.names_list = self.info_source.get_names_list()
         self.dict_lock = Lock() #lock for the mac_dict variable
@@ -56,7 +56,7 @@ class Sensor:
             print self.mac_dict
             print "#" *30
 
-    def run(self):
+    def run(self): #initialize Sensor thread
         try:
             thread.start_new_thread(self.update_dicts, ())
         except:
@@ -70,17 +70,17 @@ class Sensor:
                 print "exit program"
                 break
 
-    def map_mac(self, mac):
+    def map_mac(self, mac): #returns name associated with MAC address
         name = self.info_source.get_name(mac)
         if name != "person_not_found":
             return name
         else:
             return None
 
-    def log_leave(self, mac):
+    def log_leave(self, mac): #updates leave log
         self.info_source.log_leave(mac)
         self.info_source.log_goings()
 
-    def log_arrive(self, mac):
+    def log_arrive(self, mac): #updates arrive log
         self.info_source.log_arrive(mac)
         self.info_source.log_goings()
