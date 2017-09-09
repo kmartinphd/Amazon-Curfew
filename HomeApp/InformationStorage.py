@@ -33,6 +33,9 @@ class InformationStorage:
                 return person.name
         return 'person_not_found'
 
+    def get_names_list(self):
+        return person_list
+
     def log_leave(self, mac):
         name = self.get_name(mac)
         self.leave_times[name] = time.strftime("%H:%M:%S")

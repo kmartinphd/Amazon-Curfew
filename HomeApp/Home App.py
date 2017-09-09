@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_ask import Ask, question, statement
+from difflib import get_close_matches
 import Sensor
 import threading
 
@@ -75,7 +76,8 @@ def whoHome():
 def whoLeft(firstName, lastName):
     with open('leave_log.json') as leave_log:
         data = json.load(data_f)
-        time_left = data.get(firstName)
+        names = sensor.get_names_list()
+        time_left = data.get(get_close_matches(firstName, names))
         if (time_left == None):
             return "It looks like " + firstName + " hasn't left today."
         else:
@@ -84,7 +86,7 @@ def whoLeft(firstName, lastName):
 def whoArrive(firstName,lastName):
     with open('arrive_log.json') as leave_log:
         data = json.load(data_f)
-        time_arrive = data.get(firstName)
+        time_arrive = data.get(get_close_matches(firstName, names))
         if (time_arrive== None):
             return "It looks like " + firstName + " hasn't gotten back today"
         else:
