@@ -34,7 +34,10 @@ class InformationStorage:
         return 'person_not_found'
 
     def get_names_list(self):
-        return self.person_list
+        names = []
+        for p in self.person_list:
+            names.append(p.get_name())
+        return names
 
     def log_leave(self, mac):
         name = self.get_name(mac)
@@ -58,3 +61,6 @@ class Person:
     def __init__(self, name, mac_address):
         self.name = name
         self.mac_address = mac_address
+
+    def get_name(self):
+        return self.name

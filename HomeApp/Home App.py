@@ -37,12 +37,12 @@ def run_who_home():
     return statement(whoHome())
 
 @ask.intent("WhoLeft")
-def run_who_left(firstName, lastName):
-    return statement(whoLeft(firstName, lastName))
+def run_who_left(firstName):
+    return statement(whoLeft(firstName))
 
-@ask.intent("WhoArrive")
-def run_who_arrive(firstName, lastName):
-    return statement(whoLeft(firstName, lastName))
+@ask.intent("WhoCame")
+def run_who_arrive(firstName):
+    return statement(whoLeft(firstName))
 
 def whoHome():
     """
@@ -76,21 +76,31 @@ def whoHome():
     return message
 
 
-def whoLeft(firstName, lastName):
-    with open('leave_log.json') as leave_log:
+def whoLeft(firstName):
+    with open('leave_log') as leave_log:
         data = json.load(leave_log)
         names = sensor.get_names_list()
-        time_left = data.get(get_close_matches(firstName, names))
+        print "*" * 30
+        print firstName
+        print names
+        print get_close_matches(firstName, names)
+        print "*"*30
+        time_left = data.get(get_close_matches(firstName, names)[0])
         if (time_left == None):
             return "It looks like " + firstName + " hasn't left today."
         else:
             return firstName + " left at " + str(time_left)[:-3]
 
-def whoArrive(firstName,lastName):
-    with open('arrive_log.json') as leave_log:
+def whoArrive(firstName):
+    with open('arrive_log') as leave_log:
         data = json.load(leave_log)
         names = sensor.get_names_list()
-        time_arrive = data.get(get_close_matches(firstName, names))
+        print "*" * 30
+        print firstName
+        print names
+        print get_close_matches(firstName, names)
+        print "*" * 30
+        time_arrive = data.get(get_close_matches(firstName, names)[0])
         if (time_arrive== None):
             return "It looks like " + firstName + " hasn't gotten back today"
         else:
