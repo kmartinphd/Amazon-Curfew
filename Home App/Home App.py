@@ -8,6 +8,7 @@ mac_name_dict = {}
 macs_at_home = []
 blue_in_area = get_addresses()
 sensor = Sensor()
+sensor.run()
 @app.route("/")
 def homepage():
     """
