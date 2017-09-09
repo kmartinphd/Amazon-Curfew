@@ -9,10 +9,6 @@
         {
           "name": "firstName",
           "type": "AMAZON.US_FIRST_NAME"
-        },
-        {
-          "name": "lastName",
-          "type": "AMAZON.US_FIRST_NAME"
         }
       ]
     },
@@ -21,10 +17,6 @@
       "slots": [
         {
           "name": "firstName",
-          "type": "AMAZON.US_FIRST_NAME"
-        },
-        {
-          "name": "lastName",
           "type": "AMAZON.US_FIRST_NAME"
         }
       ]
