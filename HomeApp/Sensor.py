@@ -17,6 +17,7 @@ class Sensor:
         self.mac_dict = {}
         for m in temp:
             self.mac_dict[m] = None #dictionary mapping the bluetooth addresses to signal strength
+            self.log_leave(m)
 
     def get_mac_dict(self):
         return self.mac_dict
@@ -46,7 +47,6 @@ class Sensor:
                         elif temp is None:
                             self.log_arrive(m)
 
-                    self.info_source.log_goings()
 
             except (KeyboardInterrupt):
                 message = "Exception raised in Sensor run loop, method update_dict: either Keyboard Interrupt or System exit"
@@ -79,6 +79,8 @@ class Sensor:
 
     def log_leave(self, mac):
         self.info_source.log_leave(mac)
+        self.info_source.log_goings()
 
     def log_arrive(self, mac):
         self.info_source.log_arrive(mac)
+        self.info_source.log_goings()

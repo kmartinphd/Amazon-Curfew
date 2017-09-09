@@ -81,30 +81,31 @@ def whoLeft(firstName):
         data = json.load(leave_log)
         names = sensor.get_names_list()
         print "*" * 30
-        print firstName
-        print names
-        print get_close_matches(firstName, names)
-        print "*"*30
-        time_left = data.get(get_close_matches(firstName, names)[0])
-        if (time_left == None):
-            return "It looks like " + firstName + " hasn't left today."
+        nearest = get_close_matches(firstName, names)
+        if nearest:
+            time_left = data.get(nearest[0])
+            if (time_left == None):
+                return "It looks like " + firstName + " hasn't left today."
+            else:
+                return firstName + " left at " + convert_time(time_left)
         else:
-            return firstName + " left at " + str(time_left)[:-3]
-
+            return "I don't know who " + firstName + " is"
 def whoCame(firstName):
     with open('arrive_log') as leave_log:
         data = json.load(leave_log)
         names = sensor.get_names_list()
-        print "*" * 30
-        print firstName
-        print names
-        print get_close_matches(firstName, names)
-        print "*" * 30
-        time_arrive = data.get(get_close_matches(firstName, names)[0])
-        if (time_arrive== None):
-            return "It looks like " + firstName + " hasn't gotten back today"
+        nearest = get_close_matches(firstName, names)
+        if nearest:
+            time_arrive = data.get(nearest[0])
+            if (time_arrive== None):
+                return "It looks like " + firstName + " hasn't gotten back today"
+            else:
+                return firstName + " arrived at " + convert_time(time_arrive)
         else:
-            return firstName + " arrived at " + str(time_arrive)[:-3]
+            print "#" *30
+            print firstName
+            print "#" *30
+            return "I don't know who " + firstName + " is"
 
 def get_addresses():
     """
@@ -119,6 +120,19 @@ def get_addresses():
             macs_at_home.append(m)
 
     return macs_at_home
+
+
+def convert_time(military_time):
+    hour = int(float(military_time[0:2]))
+    minutes = int(float(military_time[3:5]))
+
+    if (hour < 12):
+        return military_time[:5] + 'a.m.'
+    elif (hour == 12):
+        return military_time[:5] + 'p.m.'
+    else:
+        return str(hour - 12) + ':' + str(minutes) + 'p.m.'
+
 
 
 if __name__ == '__main__':
