@@ -3,6 +3,7 @@ from flask_ask import Ask, question, statement
 from difflib import get_close_matches
 import Sensor
 import threading
+import json
 
 
 app = Flask(__name__)
@@ -14,6 +15,8 @@ sensor = Sensor.Sensor()
 class SensorRunnerThread(threading.Thread):
     def run(self):
         sensor.run()
+
+
 @app.route("/")
 def homepage():
     """
@@ -38,7 +41,7 @@ def run_who_left(firstName, lastName):
     return statement(whoLeft(firstName, lastName))
 
 @ask.intent("WhoArrive")
-def run_who_arrive(firsName, lastName):
+def run_who_arrive(firstName, lastName):
     return statement(whoLeft(firstName, lastName))
 
 def whoHome():
@@ -75,7 +78,7 @@ def whoHome():
 
 def whoLeft(firstName, lastName):
     with open('leave_log.json') as leave_log:
-        data = json.load(data_f)
+        data = json.load(leave_log)
         names = sensor.get_names_list()
         time_left = data.get(get_close_matches(firstName, names))
         if (time_left == None):
@@ -85,12 +88,13 @@ def whoLeft(firstName, lastName):
 
 def whoArrive(firstName,lastName):
     with open('arrive_log.json') as leave_log:
-        data = json.load(data_f)
+        data = json.load(leave_log)
+        names = sensor.get_names_list()
         time_arrive = data.get(get_close_matches(firstName, names))
         if (time_arrive== None):
             return "It looks like " + firstName + " hasn't gotten back today"
         else:
-            return firstName + " arrived at " + str(time_left)[:-3]
+            return firstName + " arrived at " + str(time_arrive)[:-3]
 
 def get_addresses():
     """

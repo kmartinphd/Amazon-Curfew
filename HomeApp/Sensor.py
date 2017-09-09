@@ -12,7 +12,7 @@ class Sensor:
     def __init__(self):
         self.info_source = InformationStorage.InformationStorage()
         temp = self.info_source.get_mac_addresses()
-        self.names_list = info_source.get_names()
+        self.names_list = self.info_source.get_names_list()
         self.dict_lock = Lock() #lock for the mac_dict variable
         self.mac_dict = {}
         for m in temp:

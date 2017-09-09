@@ -34,7 +34,7 @@ class InformationStorage:
         return 'person_not_found'
 
     def get_names_list(self):
-        return person_list
+        return self.person_list
 
     def log_leave(self, mac):
         name = self.get_name(mac)
