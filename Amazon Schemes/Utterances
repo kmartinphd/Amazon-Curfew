@@ -3,16 +3,16 @@ WhoHome who is at home
 WhoHome is anyone home
 WhoHome who's at my house
 
-WhoLeft when did {firstName} {lastName} leave
-WhoLeft when did {firstName} {lastName} go
-WhoLeft did {firstName} {lastName} leave
-WhoLeft did {firstName} {lastName} go
-WhoLeft what time did {firstName} {lastName} leave
-WhoLeft what time did {firstName} {lastName} go
+WhoLeft when did {firstName} leave
+WhoLeft when did {firstName} go
+WhoLeft did {firstName} leave
+WhoLeft did {firstName} go
+WhoLeft what time did {firstName} leave
+WhoLeft what time did {firstName} go
 
-WhoCame when did {firstName} {lastName} come back
-WhoCame did {firstName} {lastName} come back
-WhoCame is {firstName} {lastName} back
-WhoCame what time did {firstName} {lastName} come back
-WhoCame when did {firstName} {lastName} arrive
-WhoCame when did {firstName} {lastName} get home
+WhoCame when did {firstName} come back
+WhoCame did {firstName} come back
+WhoCame is {firstName} back
+WhoCame what time did {firstName} come back
+WhoCame when did {firstName} arrive
+WhoCame when did {firstName} get home
