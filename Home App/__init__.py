@@ -1,0 +1,1 @@
+from InformatoinStorage.py import InformationStorage
