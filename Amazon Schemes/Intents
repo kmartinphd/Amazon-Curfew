@@ -4,30 +4,22 @@
       "intent": "WhoHome"
     },
     {
-      "intent": "WhoLeft",
       "slots": [
         {
           "name": "firstName",
           "type": "AMAZON.US_FIRST_NAME"
-        },
-        {
-          "name": "lastName",
-          "type": "AMAZON.US_FIRST_NAME"
         }
-      ]
+      ],
+      "intent": "WhoLeft"
     },
     {
-      "intent": "WhoCame",
       "slots": [
         {
           "name": "firstName",
           "type": "AMAZON.US_FIRST_NAME"
-        },
-        {
-          "name": "lastName",
-          "type": "AMAZON.US_FIRST_NAME"
         }
-      ]
+      ],
+      "intent": "WhoCame"
     }
   ]
 }
