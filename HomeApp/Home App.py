@@ -33,7 +33,7 @@ def start_skill():
 
 
 @ask.intent("WhoHome")
-def run_who_hone():
+def run_who_home():
     return statement(whoHome())
 
 @ask.intent("WhoLeft")

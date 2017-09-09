@@ -43,7 +43,7 @@ class Sensor:
                     if self.mac_dict[m] != temp:
                         if self.mac_dict[m] is None:
                             self.log_leave(m)
-                        else:
+                        elif temp is None:
                             self.log_arrive(m)
 
                     self.info_source.log_goings()
