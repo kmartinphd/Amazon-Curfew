@@ -8,11 +8,13 @@ import json
 
 app = Flask(__name__)
 ask = Ask(app, "/")
-mac_name_dict = {}
-macs_at_home = []
-sensor = Sensor.Sensor()
+macs_at_home = [] #list of all the macs which are "home"
+sensor = Sensor.Sensor() #sensor object in charge of managing information about who's home
 
 class SensorRunnerThread(threading.Thread):
+    """
+    A thread class in order to operate the sensing operations of the app
+    """
     def run(self):
         sensor.run()
 
@@ -29,19 +31,39 @@ def homepage():
 
 @ask.launch
 def start_skill():
+    """
+    default intent for the skill. States who is home
+    :return: a statement stating who is home
+    """
     return statement(whoHome())
 
 
 @ask.intent("WhoHome")
 def run_who_home():
+    """
+    the WhoHome intents say how many people and who is home based on the registered macs
+    :return: statement giving how many people and who is home based on the registered macs
+    """
     return statement(whoHome())
 
 @ask.intent("WhoLeft")
 def run_who_left(firstName):
+    """
+    The WhoLeft intent says when a person left
+    :param firstName: first name of the person to be found
+    :return: returns a statement saying when a person left if that person is in the name's list otherwise Alexa says
+    she does not know who you are asking for
+    """
     return statement(whoLeft(firstName))
 
 @ask.intent("WhoCame")
 def run_who_arrive(firstName):
+    """
+    the WhoCame intnet says when a person arrived
+    :param firstName: first name of person to be found
+    :return: returns a statement saying when a person arrived if that person is in the name's list otherwise Alexa says
+    she does not know who you are asking for
+    """
     return statement(whoCame(firstName))
 
 def whoHome():
@@ -77,6 +99,11 @@ def whoHome():
 
 
 def whoLeft(firstName):
+    """
+    scans the leave_log to identify when a specific person left. If that person is not found then returns a statement
+    that the person is not known.
+    :param firstName: first name of person to be found
+    """
     with open('leave_log') as leave_log:
         data = json.load(leave_log)
         names = sensor.get_names_list()
@@ -91,6 +118,11 @@ def whoLeft(firstName):
         else:
             return "I don't know who " + firstName + " is"
 def whoCame(firstName):
+    """
+    scans the leave_log to identify when a specific person left. If that person is not found then returns a statement
+    that the person is not known.
+    :param firstName: first name of person to be found
+    """
     with open('arrive_log') as leave_log:
         data = json.load(leave_log)
         names = sensor.get_names_list()
@@ -123,6 +155,11 @@ def get_addresses():
 
 
 def convert_time(military_time):
+    """
+    converts a military time to a a.m. p.m. time
+    :param military_time: time in the form HH:MM:SS
+    :return: a string in the form HH:MM am/pm
+    """
     hour = int(float(military_time[0:2]))
     minutes = int(float(military_time[3:5]))
 
@@ -136,10 +173,10 @@ def convert_time(military_time):
         return str(hour - 12) + ':' + str(minutes) + 'p.m.'
 
 
-
+#runs the actual app
 if __name__ == '__main__':
     sensor_thread = SensorRunnerThread()
-    sensor_thread.setDaemon(True)
+    sensor_thread.setDaemon(True) #ensures that sensor_thread doesn't keep running even when program is killed
     sensor_thread.start()
 
     app.run(debug=True, use_reloader=False, threaded = True)
